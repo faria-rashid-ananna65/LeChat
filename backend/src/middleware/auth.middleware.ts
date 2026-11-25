@@ -6,9 +6,9 @@ export interface AuthRequest extends Request {
 }
 
 export const authMiddleware = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const authHeader = req.headers.authorization;
 
@@ -27,6 +27,8 @@ export const authMiddleware = (
     req.user = decoded;
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Unauthorized: Invalid or expired token" });
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Invalid or expired token" });
   }
 };
