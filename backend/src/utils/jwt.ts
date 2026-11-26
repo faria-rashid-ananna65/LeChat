@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey12345";
 
 export interface JwtPayload {
+  id?: string;
   userId: string;
   email: string;
 }
