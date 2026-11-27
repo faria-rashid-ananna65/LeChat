@@ -7,16 +7,70 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  name          String
-  email         String  @unique
-  password      String 
-  image         String?
-  createdAt     DateTime       @default(now())
+  id           String   @id @default(cuid())
+  name         String
+  username     String   @unique
+  email        String   @unique
+  password     String
+  image        String?
+  createdAt    DateTime @default(now())
+
+  posts        Post[]
+  likes        Like[]
+  comments     Comment[]
+  sentRequests     FriendRequest[] @relation("Sent")
+  receivedRequests FriendRequest[] @relation("Received")
   updatedAt     DateTime       @updatedAt
 
   conversations Conversation[] @relation("UserConversations")
   messages      Message[]
+}
+
+model FriendRequest {
+  id         String @id @default(cuid())
+  senderId   String
+  receiverId String
+  status     String @default("PENDING")
+  sender     User   @relation("Sent", fields: [senderId], references: [id])
+  receiver   User   @relation("Received", fields: [receiverId], references: [id])
+  @@unique([senderId, receiverId])
+}
+
+model Friendship {
+  id       String @id @default(cuid())
+  userId   String
+  friendId String
+  @@unique([userId, friendId])
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  caption   String?
+  image     String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  likes     Like[]
+  comments  Comment[]
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  id     String @id @default(cuid())
+  userId String
+  postId String
+  user   User   @relation(fields: [userId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
+  @@unique([userId, postId]) // Ekjon ekta Post e 1 bar e Like dite parbo
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  text      String
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 model Conversation {
