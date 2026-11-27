@@ -46,7 +46,6 @@ model Friendship {
 model Post {
   id        String   @id @default(cuid())
   caption   String?
-  image     String?
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   likes     Like[]

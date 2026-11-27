@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./route/auth.route.js";
 import connectRoutes from "./route/connect.route.js";
+import postRoutes from "./route/post.routes.js";
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", connectRoutes);
+app.use("/api/posts", postRoutes);
 
 
 
